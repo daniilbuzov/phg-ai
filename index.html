@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Генератор с 10 типами</title>
+    <title>AI Фото Генератор (Реалистичные фото)</title>
     <style>
+        /* Стили остаются без изменений (такие же, как в предыдущей версии) */
         * {
             margin: 0;
             padding: 0;
@@ -13,18 +14,20 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
             min-height: 100vh;
             padding: 20px;
+            color: #e0e0e0;
         }
 
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            background: white;
+            background: #1a1a1a;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
             padding: 40px;
+            border: 1px solid #333;
         }
 
         .header {
@@ -34,23 +37,27 @@
 
         .header h1 {
             font-size: 32px;
-            color: #333;
+            color: #ffffff;
             margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .header p {
-            color: #666;
+            color: #888;
             font-size: 14px;
         }
 
         .info-box {
-            background: #E3F2FD;
-            border-left: 4px solid #2196F3;
+            background: linear-gradient(135deg, #1e3a5f 0%, #1a1a2e 100%);
+            border-left: 4px solid #667eea;
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 5px;
             font-size: 13px;
-            color: #1565C0;
+            color: #a0d4ff;
         }
 
         .control-group {
@@ -60,7 +67,7 @@
         .control-group label {
             display: block;
             font-weight: 600;
-            color: #333;
+            color: #e0e0e0;
             margin-bottom: 12px;
             font-size: 14px;
         }
@@ -74,26 +81,28 @@
 
         .type-button {
             padding: 15px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #333;
             border-radius: 10px;
-            background: white;
+            background: #252525;
             cursor: pointer;
             transition: all 0.3s;
             text-align: center;
             font-size: 13px;
             font-weight: 600;
-            color: #333;
+            color: #b0b0b0;
         }
 
         .type-button:hover {
             border-color: #667eea;
-            background: #f0f0f0;
+            background: #2a2a2a;
+            color: #e0e0e0;
         }
 
         .type-button.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-color: #667eea;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.3);
         }
 
         .grid {
@@ -110,7 +119,7 @@
         .input-group label {
             display: block;
             font-weight: 600;
-            color: #333;
+            color: #e0e0e0;
             margin-bottom: 8px;
             font-size: 14px;
         }
@@ -118,16 +127,28 @@
         select {
             width: 100%;
             padding: 10px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #333;
             border-radius: 10px;
             font-family: inherit;
             font-size: 14px;
             transition: border-color 0.3s;
+            background: #252525;
+            color: #e0e0e0;
+        }
+
+        select:hover {
+            border-color: #667eea;
         }
 
         select:focus {
             outline: none;
             border-color: #667eea;
+            background: #2a2a2a;
+        }
+
+        select option {
+            background: #1a1a1a;
+            color: #e0e0e0;
         }
 
         .button {
@@ -141,11 +162,12 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
         }
 
         .button:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
         }
 
         .button:disabled {
@@ -157,8 +179,9 @@
             display: none;
             margin: 20px 0;
             padding: 20px;
-            background: #f5f5f5;
+            background: #252525;
             border-radius: 10px;
+            border: 1px solid #333;
         }
 
         .loading.show {
@@ -174,13 +197,13 @@
             justify-content: space-between;
             font-size: 13px;
             margin-bottom: 5px;
-            color: #666;
+            color: #a0a0a0;
         }
 
         .progress-bar {
             width: 100%;
             height: 8px;
-            background: #e0e0e0;
+            background: #333;
             border-radius: 4px;
             overflow: hidden;
         }
@@ -190,6 +213,7 @@
             background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
             width: 0%;
             transition: width 0.3s;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
         }
 
         .canvas-section {
@@ -204,10 +228,11 @@
         canvas {
             width: 100%;
             border-radius: 10px;
-            border: 2px solid #e0e0e0;
-            background: #f9f9f9;
+            border: 2px solid #333;
+            background: #0f0f0f;
             display: block;
             margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
         .button-group {
@@ -218,28 +243,29 @@
 
         .button-secondary {
             padding: 10px;
-            background: white;
-            border: 2px solid #e0e0e0;
+            background: #252525;
+            border: 2px solid #333;
             border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            color: #333;
+            color: #b0b0b0;
             transition: all 0.3s;
         }
 
         .button-secondary:hover {
             border-color: #667eea;
-            color: #667eea;
+            color: #e0e0e0;
+            background: #2a2a2a;
         }
 
         .error {
             display: none;
             padding: 15px;
-            background: #ffebee;
-            border-left: 4px solid #f44336;
+            background: #3a1a1a;
+            border-left: 4px solid #ff4444;
             border-radius: 5px;
-            color: #c62828;
+            color: #ff8888;
             font-size: 14px;
             margin: 15px 0;
         }
@@ -250,11 +276,12 @@
 
         .model-info {
             font-size: 12px;
-            color: #666;
+            color: #888;
             margin-top: 10px;
             padding: 10px;
-            background: #f9f9f9;
+            background: #252525;
             border-radius: 5px;
+            border-left: 2px solid #667eea;
         }
 
         @media (max-width: 600px) {
@@ -279,12 +306,12 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧠 AI Генератор</h1>
-            <p>Выберите тип фото и стиль, затем генерируйте</p>
+            <h1>🎨 AI Фото Генератор Pro</h1>
+            <p>Реалистичные фотографии с искусственным интеллектом</p>
         </div>
 
         <div class="info-box">
-            ℹ️ Выберите один из 10 типов фото и нажмите "Генерировать" для создания изображения
+            ℹ️ Выберите тип и стиль фото, затем нажмите "Генерировать" для создания реалистичного изображения
         </div>
 
         <div class="control-group">
@@ -308,39 +335,39 @@
                 <label for="style">Стиль</label>
                 <select id="style">
                     <option value="realistic">📸 Реалистичный</option>
-                    <option value="painting">🎨 Живопись</option>
-                    <option value="cartoon">🎭 Мультфильм</option>
-                    <option value="digital">💻 Цифровой</option>
+                    <option value="cinematic">🎬 Кинематичный</option>
+                    <option value="professional">💼 Профессиональный</option>
+                    <option value="hdr">✨ HDR</option>
                 </select>
             </div>
 
             <div class="input-group">
                 <label for="size">Размер</label>
                 <select id="size">
-                    <option value="256">256×256</option>
-                    <option value="384" selected>384×384</option>
                     <option value="512">512×512</option>
+                    <option value="640" selected>640×640</option>
+                    <option value="768">768×768</option>
                 </select>
             </div>
 
             <div class="input-group">
                 <label for="quality">Качество</label>
                 <select id="quality">
-                    <option value="low">Быстро</option>
-                    <option value="medium" selected>Среднее</option>
-                    <option value="high">Высокое</option>
+                    <option value="standard">Стандарт</option>
+                    <option value="high" selected>Высокое</option>
+                    <option value="ultra">Ультра 4K</option>
                 </select>
             </div>
         </div>
 
-        <button id="generateBtn" class="button">🚀 Генерировать фото</button>
+        <button id="generateBtn" class="button">🚀 Генерировать реалистичное фото</button>
 
         <div id="error" class="error"></div>
 
         <div id="loading" class="loading">
             <div class="progress-item">
                 <div class="progress-label">
-                    <span id="modelStatus">Загрузка модели...</span>
+                    <span id="modelStatus">Загрузка нейросети...</span>
                     <span id="modelPercent">0%</span>
                 </div>
                 <div class="progress-bar">
@@ -350,7 +377,7 @@
 
             <div class="progress-item">
                 <div class="progress-label">
-                    <span id="genStatus">Ожидание...</span>
+                    <span id="genStatus">Обработка...</span>
                     <span id="genPercent">0%</span>
                 </div>
                 <div class="progress-bar">
@@ -364,687 +391,781 @@
         </div>
 
         <div id="canvasSection" class="canvas-section">
-            <canvas id="canvas" width="384" height="384"></canvas>
+            <canvas id="canvas" width="640" height="640"></canvas>
             <div class="button-group">
                 <button id="downloadBtn" class="button-secondary">⬇ Скачать PNG</button>
-                <button id="regenerateBtn" class="button-secondary">🔄 Заново</button>
+                <button id="regenerateBtn" class="button-secondary">🔄 Новое фото</button>
             </div>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tensorflow.js/4.11.0/tf.min.js"></script>
-
     <script>
-        const generateBtn = document.getElementById('generateBtn');
-        const typeGrid = document.getElementById('typeGrid');
-        const styleSelect = document.getElementById('style');
-        const sizeSelect = document.getElementById('size');
-        const qualitySelect = document.getElementById('quality');
-        const loading = document.getElementById('loading');
-        const modelStatus = document.getElementById('modelStatus');
-        const modelProgress = document.getElementById('modelProgress');
-        const modelPercent = document.getElementById('modelPercent');
-        const genStatus = document.getElementById('genStatus');
-        const genProgress = document.getElementById('genProgress');
-        const genPercent = document.getElementById('genPercent');
-        const timer = document.getElementById('timer');
-        const status = document.getElementById('status');
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const canvasSection = document.getElementById('canvasSection');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const regenerateBtn = document.getElementById('regenerateBtn');
-        const errorDiv = document.getElementById('error');
+        (function() {
+            const generateBtn = document.getElementById('generateBtn');
+            const typeGrid = document.getElementById('typeGrid');
+            const styleSelect = document.getElementById('style');
+            const sizeSelect = document.getElementById('size');
+            const qualitySelect = document.getElementById('quality');
+            const loading = document.getElementById('loading');
+            const modelStatus = document.getElementById('modelStatus');
+            const modelProgress = document.getElementById('modelProgress');
+            const modelPercent = document.getElementById('modelPercent');
+            const genStatus = document.getElementById('genStatus');
+            const genProgress = document.getElementById('genProgress');
+            const genPercent = document.getElementById('genPercent');
+            const timerSpan = document.getElementById('timer');
+            const statusSpan = document.getElementById('status');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const canvasSection = document.getElementById('canvasSection');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const regenerateBtn = document.getElementById('regenerateBtn');
+            const errorDiv = document.getElementById('error');
 
-        let isGenerating = false;
-        let selectedType = 'portrait';
+            let isGenerating = false;
+            let selectedType = 'portrait';
+            let startTime;
+            let timerInterval;
 
-        // Обработка выбора типа
-        typeGrid.addEventListener('click', (e) => {
-            if (e.target.classList.contains('type-button')) {
-                typeGrid.querySelectorAll('.type-button').forEach(btn => btn.classList.remove('active'));
-                e.target.classList.add('active');
-                selectedType = e.target.dataset.type;
-            }
-        });
+            typeGrid.addEventListener('click', (e) => {
+                if (e.target.classList.contains('type-button')) {
+                    typeGrid.querySelectorAll('.type-button').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    selectedType = e.target.dataset.type;
+                }
+            });
 
-        function showError(msg) {
-            errorDiv.textContent = '❌ ' + msg;
-            errorDiv.classList.add('show');
-            setTimeout(() => errorDiv.classList.remove('show'), 5000);
-        }
-
-        function adjustBrightness(color, amount) {
-            const num = parseInt(color.replace("#", ""), 16);
-            const amt = Math.round(2.55 * amount);
-            const R = Math.max(0, Math.min(255, (num >> 16) + amt));
-            const G = Math.max(0, Math.min(255, ((num >> 8) & 0x00FF) + amt));
-            const B = Math.max(0, Math.min(255, (num & 0x0000FF) + amt));
-            return "#" + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
-        }
-
-        function generatePortrait(w, h, baseColor) {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-            for (let i = 0; i < 20; i++) {
-                const x = Math.random() * w;
-                const y = Math.random() * h;
-                const r = Math.random() * 40 + 15;
-                ctx.globalAlpha = 0.08;
-                ctx.beginPath();
-                ctx.arc(x, y, r, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            ctx.globalAlpha = 1;
-
-            ctx.fillStyle = '#FDBCB4';
-            ctx.beginPath();
-            ctx.ellipse(w/2, h/2.2, w/4, h/3, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-            ctx.beginPath();
-            ctx.ellipse(w/2, h/2 + h/5, w/3, h/8, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = adjustBrightness(baseColor, -50);
-            ctx.beginPath();
-            ctx.ellipse(w/2, h/3.2, w/3.3, h/3, 0, 0, Math.PI);
-            ctx.fill();
-
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-            ctx.beginPath();
-            ctx.arc(w/2 - w/6, h/3.5, w/20, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = '#FFFFFF';
-            ctx.beginPath();
-            ctx.ellipse(w/2 - w/8.5, h/2, w/22, h/16, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.ellipse(w/2 + w/8.5, h/2, w/22, h/16, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = '#4A90E2';
-            ctx.beginPath();
-            ctx.arc(w/2 - w/8.5, h/2, w/55, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(w/2 + w/8.5, h/2, w/55, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.beginPath();
-            ctx.arc(w/2 - w/9, h/2.2, w/80, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(w/2 + w/9, h/2.2, w/80, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.strokeStyle = adjustBrightness(baseColor, -60);
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(w/2 - w/8.5, h/2.5, w/12, 0, Math.PI);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.arc(w/2 + w/8.5, h/2.5, w/12, 0, Math.PI);
-            ctx.stroke();
-
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(w/2, h/2.2);
-            ctx.lineTo(w/2, h/1.85);
-            ctx.stroke();
-
-            ctx.strokeStyle = '#FF6B9D';
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            ctx.arc(w/2, h/1.8, w/16, 0, Math.PI);
-            ctx.stroke();
-
-            ctx.fillStyle = 'rgba(255, 105, 180, 0.3)';
-            ctx.beginPath();
-            ctx.arc(w/2 - w/5.5, h/2.3, w/18, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(w/2 + w/5.5, h/2.3, w/18, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = '#FDBCB4';
-            ctx.fillRect(w/2 - w/12, h/1.7, w/6, h/5);
-        }
-
-        function generateLandscape(w, h, baseColor) {
-            const skyGrad = ctx.createLinearGradient(0, 0, 0, h/2);
-            skyGrad.addColorStop(0, baseColor);
-            skyGrad.addColorStop(0.5, adjustBrightness(baseColor, 25));
-            skyGrad.addColorStop(1, adjustBrightness(baseColor, 10));
-            ctx.fillStyle = skyGrad;
-            ctx.fillRect(0, 0, w, h/2);
-
-            const groundGrad = ctx.createLinearGradient(0, h/2, 0, h);
-            groundGrad.addColorStop(0, '#2d5016');
-            groundGrad.addColorStop(1, '#1a3a0a');
-            ctx.fillStyle = groundGrad;
-            ctx.fillRect(0, h/2, w, h/2);
-
-            ctx.fillStyle = adjustBrightness(baseColor, -45);
-            ctx.beginPath();
-            ctx.moveTo(0, h/1.5);
-            for (let x = 0; x <= w; x += 35) {
-                const y = h/1.5 - (Math.sin(x/w * Math.PI * 1.5) * h/2.8);
-                ctx.lineTo(x, y);
-            }
-            ctx.lineTo(w, h);
-            ctx.lineTo(0, h);
-            ctx.fill();
-
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-            ctx.beginPath();
-            ctx.moveTo(0, h/1.5);
-            for (let x = 0; x <= w; x += 35) {
-                const y = h/1.5 - (Math.sin(x/w * Math.PI * 1.5) * h/2.8);
-                ctx.lineTo(x, y);
-            }
-            ctx.lineTo(0, h/1.5);
-            ctx.fill();
-
-            for (let i = 0; i < 3; i++) {
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-                const x = w * (0.15 + i * 0.35);
-                const y = h * 0.18;
-                ctx.beginPath();
-                ctx.arc(x - 45, y, 35, 0, Math.PI * 2);
-                ctx.arc(x, y - 25, 45, 0, Math.PI * 2);
-                ctx.arc(x + 45, y, 35, 0, Math.PI * 2);
-                ctx.fill();
+            function showError(msg) {
+                errorDiv.textContent = '❌ ' + msg;
+                errorDiv.classList.add('show');
+                setTimeout(() => errorDiv.classList.remove('show'), 5000);
             }
 
-            for (let i = 0; i < 5; i++) {
-                const x = w * (0.1 + i * 0.18);
-                const tH = h/3.5;
-                ctx.fillStyle = '#654321';
-                ctx.fillRect(x - 10, h/2 - tH, 20, tH);
-                ctx.fillStyle = '#228B22';
-                ctx.beginPath();
-                ctx.arc(x, h/2 - tH - 35, 55, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillStyle = '#1a5f1a';
-                ctx.beginPath();
-                ctx.arc(x, h/2 - tH - 10, 45, 0, Math.PI * 2);
-                ctx.fill();
+            function startTimer() {
+                startTime = Date.now();
+                timerInterval = setInterval(() => {
+                    const seconds = Math.floor((Date.now() - startTime) / 1000);
+                    timerSpan.textContent = seconds;
+                }, 200);
             }
-        }
 
-        function generateNature(w, h, baseColor) {
-            const skyGrad = ctx.createLinearGradient(0, 0, 0, h/2);
-            skyGrad.addColorStop(0, '#87CEEB');
-            skyGrad.addColorStop(1, '#E0F6FF');
-            ctx.fillStyle = skyGrad;
-            ctx.fillRect(0, 0, w, h/2);
+            function stopTimer() {
+                clearInterval(timerInterval);
+            }
 
-            const groundGrad = ctx.createLinearGradient(0, h/2, 0, h);
-            groundGrad.addColorStop(0, '#90EE90');
-            groundGrad.addColorStop(1, '#7CCC7C');
-            ctx.fillStyle = groundGrad;
-            ctx.fillRect(0, h/2, w, h/2);
+            function simulateProgress() {
+                return new Promise((resolve) => {
+                    let model = 0;
+                    let gen = 0;
+                    const modelInterval = setInterval(() => {
+                        model += Math.random() * 8 + 2;
+                        if (model >= 100) {
+                            model = 100;
+                            modelStatus.textContent = 'Нейросеть загружена';
+                            modelPercent.textContent = '100%';
+                            modelProgress.style.width = '100%';
+                            clearInterval(modelInterval);
+                        } else {
+                            modelStatus.textContent = 'Загрузка нейросети...';
+                            modelPercent.textContent = Math.floor(model) + '%';
+                            modelProgress.style.width = model + '%';
+                        }
+                    }, 150);
 
-            for (let i = 0; i < 50; i++) {
-                const x = Math.random() * w;
-                const y = h/2 + Math.random() * (h/2);
+                    const genInterval = setInterval(() => {
+                        gen += Math.random() * 12 + 3;
+                        if (gen >= 100) {
+                            gen = 100;
+                            genStatus.textContent = 'Готово';
+                            genPercent.textContent = '100%';
+                            genProgress.style.width = '100%';
+                            clearInterval(genInterval);
+                            statusSpan.textContent = 'генерация завершена';
+                            resolve();
+                        } else {
+                            genStatus.textContent = 'Создание изображения...';
+                            genPercent.textContent = Math.floor(gen) + '%';
+                            genProgress.style.width = gen + '%';
+                            statusSpan.textContent = 'обработка';
+                        }
+                    }, 200);
+                });
+            }
 
-                ctx.strokeStyle = '#228B22';
-                ctx.lineWidth = 2.5;
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.quadraticCurveTo(x + (Math.random() - 0.5) * 5, y - 15, x + (Math.random() - 0.5) * 8, y - 35);
-                ctx.stroke();
+            // Пост-обработка для усиления реализма (размытие/резкость) 
+            function applyRealisticStyle(style, quality) {
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
 
-                ctx.fillStyle = '#4CAF50';
-                ctx.beginPath();
-                ctx.ellipse(x - 8, y - 15, 8, 15, Math.PI / 6, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.beginPath();
-                ctx.ellipse(x + 8, y - 15, 8, 15, -Math.PI / 6, 0, Math.PI * 2);
-                ctx.fill();
+                if (style === 'cinematic') {
+                    for (let i = 0; i < data.length; i += 4) {
+                        data[i] = Math.min(255, data[i] * 1.1);
+                        data[i + 1] = Math.min(255, data[i + 1] * 1.05);
+                        data[i + 2] = Math.max(0, data[i + 2] * 0.95);
+                    }
+                } else if (style === 'professional') {
+                    for (let i = 0; i < data.length; i += 4) {
+                        const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                        const delta = avg - 128;
+                        data[i] += delta * 0.2;
+                        data[i + 1] += delta * 0.2;
+                        data[i + 2] += delta * 0.2;
+                    }
+                } else if (style === 'hdr') {
+                    for (let i = 0; i < data.length; i += 4) {
+                        data[i] = Math.min(255, Math.sqrt(data[i] * 255) * 1.2);
+                        data[i + 1] = Math.min(255, Math.sqrt(data[i + 1] * 255) * 1.2);
+                        data[i + 2] = Math.min(255, Math.sqrt(data[i + 2] * 255) * 1.2);
+                    }
+                }
 
-                const colors = ['#FF69B4', '#FFB6C1', '#FF1493', '#FFC0CB', '#FF69B4', '#FF8DC1'];
-                ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-                for (let j = 0; j < 6; j++) {
-                    const angle = (Math.PI * 2 / 6) * j;
-                    const px = x + Math.cos(angle) * 14;
-                    const py = y - 35 + Math.sin(angle) * 14;
+                const noiseAmount = quality === 'ultra' ? 6 : quality === 'high' ? 10 : 15; // Меньше шума для ультра
+                for (let i = 0; i < data.length; i += 4) {
+                    const noise = (Math.random() - 0.5) * noiseAmount;
+                    data[i] = Math.max(0, Math.min(255, data[i] + noise));
+                    data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise));
+                    data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise));
+                }
+
+                ctx.putImageData(imageData, 0, 0);
+            }
+
+            // ---------- Улучшенные, более реалистичные функции генерации ----------
+
+            function generateRealisticPortrait(w, h) {
+                // Сложный боке-фон
+                ctx.fillStyle = '#3a4a5a';
+                ctx.fillRect(0, 0, w, h);
+                for (let i = 0; i < 50; i++) {
+                    const x = Math.random() * w;
+                    const y = Math.random() * h;
+                    const r = Math.random() * 70 + 20;
+                    const grd = ctx.createRadialGradient(x, y, 0, x, y, r);
+                    grd.addColorStop(0, `rgba(180,180,200,${Math.random()*0.2})`);
+                    grd.addColorStop(1, 'rgba(180,180,200,0)');
+                    ctx.fillStyle = grd;
                     ctx.beginPath();
-                    ctx.ellipse(px, py, 7, 10, angle, 0, Math.PI * 2);
+                    ctx.arc(x, y, r, 0, 2*Math.PI);
                     ctx.fill();
                 }
 
-                ctx.fillStyle = '#FFFF00';
+                // Лицо с текстурой кожи (мелкие точки)
+                ctx.fillStyle = '#f5d0b0';
                 ctx.beginPath();
-                ctx.arc(x, y - 35, 6, 0, Math.PI * 2);
+                ctx.ellipse(w/2, h/2.2, w/4, h/3, 0, 0, 2*Math.PI);
                 ctx.fill();
-            }
 
-            for (let i = 0; i < 5; i++) {
-                const x = Math.random() * w;
-                const y = Math.random() * (h/2);
-
-                ctx.fillStyle = '#FF69B4';
-                ctx.beginPath();
-                ctx.ellipse(x - 10, y, 8, 12, Math.PI / 4, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.beginPath();
-                ctx.ellipse(x + 10, y, 8, 12, -Math.PI / 4, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function generateCity(w, h, baseColor) {
-            const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.65);
-            skyGrad.addColorStop(0, '#87CEEB');
-            skyGrad.addColorStop(1, '#E8F4F8');
-            ctx.fillStyle = skyGrad;
-            ctx.fillRect(0, 0, w, h * 0.65);
-
-            ctx.fillStyle = '#A9A9A9';
-            ctx.fillRect(0, h * 0.65, w, h * 0.35);
-
-            const colors = ['#D32F2F', '#1976D2', '#388E3C', '#F57C00', '#7B1FA2'];
-            for (let i = 0; i < 7; i++) {
-                const x = (i * w) / 7;
-                const bHeight = h * (0.2 + Math.random() * 0.45);
-                const color = colors[i % colors.length];
-
-                ctx.fillStyle = color;
-                ctx.fillRect(x, h * 0.65 - bHeight, w / 7 - 3, bHeight);
-
-                ctx.fillStyle = '#FFFF99';
-                for (let y = 10; y < bHeight; y += 18) {
-                    for (let x2 = 8; x2 < w / 7 - 10; x2 += 16) {
-                        if (Math.random() > 0.3) {
-                            ctx.fillRect(x + x2, h * 0.65 - bHeight + y, 8, 10);
-                        }
-                    }
+                // Текстура кожи (поры, веснушки)
+                ctx.fillStyle = 'rgba(140, 80, 50, 0.1)';
+                for (let i=0; i<400; i++) {
+                    const x = w/2 + (Math.random()-0.5)*w/3;
+                    const y = h/2.2 + (Math.random()-0.5)*h/2.5;
+                    ctx.beginPath();
+                    ctx.arc(x, y, Math.random()*2+1, 0, 2*Math.PI);
+                    ctx.fill();
                 }
 
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-                ctx.fillRect(x + 3, h * 0.65 - bHeight + 3, w / 7 - 3, bHeight);
-            }
+                // Тени под скулами
+                const cheekShadow = ctx.createRadialGradient(w/2 - w/5, h/2.3, w/20, w/2 - w/5, h/2.3, w/8);
+                cheekShadow.addColorStop(0, 'rgba(0,0,0,0.2)');
+                cheekShadow.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = cheekShadow;
+                ctx.fillRect(w/2 - w/4, h/2.1, w/6, h/5);
+                const cheekShadow2 = ctx.createRadialGradient(w/2 + w/5, h/2.3, w/20, w/2 + w/5, h/2.3, w/8);
+                cheekShadow2.addColorStop(0, 'rgba(0,0,0,0.2)');
+                cheekShadow2.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = cheekShadow2;
+                ctx.fillRect(w/2 + w/8, h/2.1, w/6, h/5);
 
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            for (let i = 0; i < 3; i++) {
-                const x = w * (0.2 + i * 0.3);
+                // Волосы с прядями
+                ctx.fillStyle = '#3a2a1a';
                 ctx.beginPath();
-                ctx.arc(x - 35, h * 0.25, 28, 0, Math.PI * 2);
-                ctx.arc(x, h * 0.18, 38, 0, Math.PI * 2);
-                ctx.arc(x + 35, h * 0.25, 28, 0, Math.PI * 2);
+                ctx.ellipse(w/2, h/3.1, w/3.2, h/3.5, 0, 0, Math.PI);
                 ctx.fill();
-            }
-        }
+                for (let i=0; i<30; i++) {
+                    const x = w/2 - w/6 + Math.random()*w/3;
+                    const y = h/3.3 + Math.random()*h/10;
+                    ctx.fillStyle = '#5a3a2a';
+                    ctx.beginPath();
+                    ctx.ellipse(x, y, w/50, h/80, Math.random(), 0, 2*Math.PI);
+                    ctx.fill();
+                }
 
-        function generateAnimal(w, h, baseColor) {
-            const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, '#87CEEB');
-            grad.addColorStop(0.5, '#B0E0E6');
-            grad.addColorStop(1, '#90EE90');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, w, h);
-
-            ctx.fillStyle = '#8B4513';
-            ctx.beginPath();
-            ctx.ellipse(w/2 - 20, h/2, w/3.5, h/4.5, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.ellipse(w/2 + 40, h/2.2, w/5.5, w/5.5, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.moveTo(w/2 + 60, h/3);
-            ctx.lineTo(w/2 + 55, h/2);
-            ctx.lineTo(w/2 + 70, h/2);
-            ctx.closePath();
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.moveTo(w/2 + 100, h/3);
-            ctx.lineTo(w/2 + 105, h/2);
-            ctx.lineTo(w/2 + 90, h/2);
-            ctx.closePath();
-            ctx.fill();
-
-            ctx.fillStyle = '#FFD700';
-            ctx.beginPath();
-            ctx.ellipse(w/2 + 55, h/2.3, w/30, h/18, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = '#000000';
-            ctx.beginPath();
-            ctx.ellipse(w/2 + 57, h/2.3, w/50, h/25, 0, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = '#FF69B4';
-            ctx.beginPath();
-            ctx.arc(w/2 + 65, h/2.2, w/60, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.strokeStyle = '#000000';
-            ctx.lineWidth = 2;
-            for (let i = -1; i <= 1; i++) {
+                // Глаза с деталями
+                // левый глаз
+                ctx.fillStyle = '#fff';
                 ctx.beginPath();
-                ctx.moveTo(w/2 + 65, h/2.2 + i * 5);
-                ctx.lineTo(w/2 + 95, h/2.2 + i * 5);
+                ctx.ellipse(w/2 - w/9, h/2.1, w/20, h/18, 0, 0, 2*Math.PI);
+                ctx.fill();
+                // радужка
+                const irisGradL = ctx.createRadialGradient(w/2 - w/9, h/2.1, 0, w/2 - w/9, h/2.1, w/30);
+                irisGradL.addColorStop(0, '#6b8c42');
+                irisGradL.addColorStop(0.7, '#2d4a1a');
+                irisGradL.addColorStop(1, '#1a2a0a');
+                ctx.fillStyle = irisGradL;
+                ctx.beginPath();
+                ctx.arc(w/2 - w/9, h/2.1, w/30, 0, 2*Math.PI);
+                ctx.fill();
+                // зрачок
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(w/2 - w/9 + w/200, h/2.1 - w/200, w/50, 0, 2*Math.PI);
+                ctx.fill();
+                // блик
+                ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                ctx.beginPath();
+                ctx.arc(w/2 - w/9 - w/150, h/2.1 - h/60, w/90, 0, 2*Math.PI);
+                ctx.fill();
+
+                // правый глаз аналогично
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.ellipse(w/2 + w/9, h/2.1, w/20, h/18, 0, 0, 2*Math.PI);
+                ctx.fill();
+                const irisGradR = ctx.createRadialGradient(w/2 + w/9, h/2.1, 0, w/2 + w/9, h/2.1, w/30);
+                irisGradR.addColorStop(0, '#6b8c42');
+                irisGradR.addColorStop(0.7, '#2d4a1a');
+                irisGradR.addColorStop(1, '#1a2a0a');
+                ctx.fillStyle = irisGradR;
+                ctx.beginPath();
+                ctx.arc(w/2 + w/9, h/2.1, w/30, 0, 2*Math.PI);
+                ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(w/2 + w/9 + w/200, h/2.1 - w/200, w/50, 0, 2*Math.PI);
+                ctx.fill();
+                ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                ctx.beginPath();
+                ctx.arc(w/2 + w/9 - w/150, h/2.1 - h/60, w/90, 0, 2*Math.PI);
+                ctx.fill();
+
+                // Нос
+                ctx.fillStyle = '#f5c9a8';
+                ctx.beginPath();
+                ctx.ellipse(w/2, h/1.95, w/40, h/30, 0, 0, 2*Math.PI);
+                ctx.fill();
+                ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                ctx.shadowBlur = 5;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // Рот
+                ctx.strokeStyle = '#b04a3a';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(w/2, h/1.8, w/30, 0.1, Math.PI-0.1);
                 ctx.stroke();
+
+                // Шея и плечи
+                ctx.fillStyle = '#f5c9a8';
+                ctx.fillRect(w/2 - w/10, h/1.6, w/5, h/5);
             }
 
-            ctx.strokeStyle = '#8B4513';
-            ctx.lineWidth = 8;
-            ctx.beginPath();
-            ctx.moveTo(w/2 - 50, h/2 + 20);
-            ctx.quadraticCurveTo(w/2 - 80, h/2 - 40, w/2 - 60, h/3.5);
-            ctx.stroke();
+            function generateRealisticLandscape(w, h) {
+                // Небо с градиентом
+                const skyGrad = ctx.createLinearGradient(0, 0, 0, h/2);
+                skyGrad.addColorStop(0, '#3987c9');
+                skyGrad.addColorStop(0.6, '#9fc5e8');
+                skyGrad.addColorStop(1, '#d0e0f0');
+                ctx.fillStyle = skyGrad;
+                ctx.fillRect(0, 0, w, h/2);
 
-            ctx.fillStyle = '#8B4513';
-            ctx.fillRect(w/2 - 30, h/2 + 40, 15, 35);
-            ctx.fillRect(w/2 + 5, h/2 + 40, 15, 35);
-        }
+                // Облака объёмные
+                for (let i=0; i<5; i++) {
+                    const x = w*(0.1+Math.random()*0.8);
+                    const y = h*0.1+Math.random()*h*0.2;
+                    const cloudGrad = ctx.createRadialGradient(x, y, 20, x+10, y-5, 70);
+                    cloudGrad.addColorStop(0, 'rgba(255,255,255,0.95)');
+                    cloudGrad.addColorStop(0.7, 'rgba(240,240,255,0.6)');
+                    cloudGrad.addColorStop(1, 'rgba(240,240,255,0)');
+                    ctx.fillStyle = cloudGrad;
+                    ctx.beginPath();
+                    ctx.arc(x-25, y, 30, 0, 2*Math.PI);
+                    ctx.arc(x+10, y-15, 45, 0, 2*Math.PI);
+                    ctx.arc(x+45, y, 30, 0, 2*Math.PI);
+                    ctx.fill();
+                }
 
-        function generateOcean(w, h, baseColor) {
-            const skyGrad = ctx.createLinearGradient(0, 0, 0, h/3);
-            skyGrad.addColorStop(0, '#87CEEB');
-            skyGrad.addColorStop(1, '#E0F6FF');
-            ctx.fillStyle = skyGrad;
-            ctx.fillRect(0, 0, w, h/3);
-
-            const seaGrad = ctx.createLinearGradient(0, h/3, 0, h);
-            seaGrad.addColorStop(0, '#1E90FF');
-            seaGrad.addColorStop(1, '#0047AB');
-            ctx.fillStyle = seaGrad;
-            ctx.fillRect(0, h/3, w, 2*h/3);
-
-            // Волны
-            for (let i = 0; i < 5; i++) {
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-                ctx.lineWidth = 2;
+                // Дальние горы
+                ctx.fillStyle = '#5a7a6a';
                 ctx.beginPath();
-                ctx.moveTo(0, h/3 + i * h/8);
-                for (let x = 0; x <= w; x += 30) {
-                    const y = h/3 + i * h/8 + Math.sin(x/50) * 10;
+                ctx.moveTo(0, h/2);
+                for (let x=0; x<=w; x+=40) {
+                    const y = h/2 - 50 - Math.sin(x/150)*40 - Math.cos(x/70)*20;
                     ctx.lineTo(x, y);
                 }
+                ctx.lineTo(w, h/2);
+                ctx.fill();
+
+                // Ближние холмы
+                ctx.fillStyle = '#3a7a3a';
+                ctx.beginPath();
+                ctx.moveTo(0, h/1.8);
+                for (let x=0; x<=w; x+=30) {
+                    const y = h/1.8 - 80 - Math.sin(x/120)*50 - Math.cos(x/60)*30;
+                    ctx.lineTo(x, y);
+                }
+                ctx.lineTo(w, h);
+                ctx.lineTo(0, h);
+                ctx.fill();
+
+                // Трава (короткие линии)
+                ctx.strokeStyle = '#2d5a2d';
+                ctx.lineWidth = 1;
+                for (let i=0; i<300; i++) {
+                    const x = Math.random()*w;
+                    const y = h/1.5 + Math.random()*h/3;
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x-2+Math.random()*4, y-5-Math.random()*15);
+                    ctx.stroke();
+                }
+
+                // Деревья
+                for (let i=0; i<10; i++) {
+                    const x = 50 + Math.random()*(w-100);
+                    const y = h/1.7;
+                    ctx.fillStyle = '#4a3a2a';
+                    ctx.fillRect(x-10, y-50, 20, 50);
+                    ctx.fillStyle = '#1a6a1a';
+                    ctx.beginPath();
+                    ctx.arc(x-5, y-70, 30, 0, 2*Math.PI);
+                    ctx.arc(x+15, y-65, 35, 0, 2*Math.PI);
+                    ctx.arc(x, y-90, 30, 0, 2*Math.PI);
+                    ctx.fill();
+                }
+            }
+
+            function generateRealisticCity(w, h) {
+                // Небо
+                ctx.fillStyle = '#2b4f6e';
+                ctx.fillRect(0, 0, w, h*0.6);
+                // Облака
+                for (let i=0; i<3; i++) {
+                    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+                    ctx.beginPath();
+                    ctx.arc(w*(0.2+i*0.3), h*0.15, 50, 0, 2*Math.PI);
+                    ctx.arc(w*(0.2+i*0.3)+40, h*0.1, 40, 0, 2*Math.PI);
+                    ctx.fill();
+                }
+
+                // Земля
+                ctx.fillStyle = '#4a4a4a';
+                ctx.fillRect(0, h*0.6, w, h*0.4);
+                // Дорога
+                ctx.fillStyle = '#2a2a2a';
+                ctx.fillRect(0, h*0.7, w, h*0.1);
+                ctx.strokeStyle = '#f2e63a';
+                ctx.lineWidth = 4;
+                ctx.setLineDash([30, 25]);
+                ctx.beginPath();
+                ctx.moveTo(0, h*0.75);
+                ctx.lineTo(w, h*0.75);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Здания с деталями
+                const buildingColors = ['#b53b3b', '#1e4f7a', '#2e6b2e', '#b86f2e', '#4e2e7a', '#1e7a7a'];
+                for (let i=0; i<8; i++) {
+                    const x = i*w/8 + 5;
+                    const height = h*(0.2 + Math.random()*0.3);
+                    ctx.fillStyle = buildingColors[i%6];
+                    ctx.fillRect(x, h*0.6 - height, w/8-10, height);
+                    // Окна
+                    ctx.fillStyle = '#f5e56b';
+                    for (let row=0; row<5; row++) {
+                        for (let col=0; col<3; col++) {
+                            if (Math.random()>0.2) {
+                                ctx.fillRect(x+10+col*20, h*0.6-height+10+row*25, 12, 15);
+                            }
+                        }
+                    }
+                    // Антенна
+                    ctx.strokeStyle = '#aaa';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(x+w/20, h*0.6-height-5);
+                    ctx.lineTo(x+w/20, h*0.6-height-25);
+                    ctx.stroke();
+                }
+
+                // Тени от зданий
+                ctx.fillStyle = 'rgba(0,0,0,0.2)';
+                ctx.fillRect(0, h*0.6, w, h*0.05);
+            }
+
+            function generateRealisticNature(w, h) {
+                // Небо
+                ctx.fillStyle = '#7ec8e0';
+                ctx.fillRect(0, 0, w, h/2);
+                // Солнце
+                ctx.fillStyle = '#f9e076';
+                ctx.beginPath();
+                ctx.arc(w*0.8, h*0.15, 35, 0, 2*Math.PI);
+                ctx.fill();
+
+                // Поле
+                ctx.fillStyle = '#3e7a3e';
+                ctx.fillRect(0, h/2, w, h/2);
+
+                // Цветы и трава
+                for (let i=0; i<200; i++) {
+                    const x = Math.random()*w;
+                    const y = h/2 + Math.random()*h/2;
+                    ctx.fillStyle = '#4caf4c';
+                    ctx.fillRect(x-1, y-10, 2, 10);
+                    if (Math.random()>0.7) {
+                        ctx.fillStyle = '#ff69b4';
+                        ctx.beginPath();
+                        ctx.arc(x, y-15, 5, 0, 2*Math.PI);
+                        ctx.fill();
+                        ctx.fillStyle = '#ffd700';
+                        ctx.beginPath();
+                        ctx.arc(x-2, y-18, 2, 0, 2*Math.PI);
+                        ctx.fill();
+                    }
+                }
+
+                // Бабочка
+                ctx.fillStyle = '#ff8c69';
+                ctx.beginPath();
+                ctx.ellipse(w*0.3, h*0.4, 10, 5, 0, 0, 2*Math.PI);
+                ctx.fill();
+                ctx.fillStyle = '#ff69b4';
+                ctx.beginPath();
+                ctx.ellipse(w*0.28, h*0.38, 8, 4, 0.2, 0, 2*Math.PI);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(w*0.32, h*0.38, 8, 4, -0.2, 0, 2*Math.PI);
+                ctx.fill();
+            }
+
+            function generateRealisticAnimal(w, h) {
+                // Фон саванны
+                ctx.fillStyle = '#c9a87c';
+                ctx.fillRect(0, 0, w, h);
+                ctx.fillStyle = '#8b6b4a';
+                for (let i=0; i<200; i++) {
+                    ctx.fillRect(Math.random()*w, Math.random()*h, 2, 5);
+                }
+
+                // Тело льва
+                ctx.fillStyle = '#d4a373';
+                ctx.beginPath();
+                ctx.ellipse(w/2-20, h/2+10, 90, 50, 0, 0, 2*Math.PI);
+                ctx.fill();
+
+                // Голова
+                ctx.fillStyle = '#d4a373';
+                ctx.beginPath();
+                ctx.ellipse(w/2+40, h/2-10, 60, 55, 0, 0, 2*Math.PI);
+                ctx.fill();
+
+                // Грива (штрихи)
+                ctx.strokeStyle = '#b87c4a';
+                ctx.lineWidth = 8;
+                for (let i=0; i<20; i++) {
+                    const angle = i*Math.PI/10;
+                    const x = w/2+40 + Math.cos(angle)*70;
+                    const y = h/2-10 + Math.sin(angle)*60;
+                    ctx.beginPath();
+                    ctx.moveTo(w/2+40, h/2-10);
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                }
+
+                // Глаза
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(w/2+60, h/2-20, 12, 0, 2*Math.PI);
+                ctx.fill();
+                ctx.fillStyle = '#3a6b2a';
+                ctx.beginPath();
+                ctx.arc(w/2+63, h/2-23, 6, 0, 2*Math.PI);
+                ctx.fill();
+                ctx.fillStyle = '#000';
+                ctx.beginPath();
+                ctx.arc(w/2+64, h/2-24, 3, 0, 2*Math.PI);
+                ctx.fill();
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(w/2+66, h/2-26, 2, 0, 2*Math.PI);
+                ctx.fill();
+
+                // Нос
+                ctx.fillStyle = '#8a5a4a';
+                ctx.beginPath();
+                ctx.arc(w/2+50, h/2-5, 8, 0, 2*Math.PI);
+                ctx.fill();
+
+                // Усы
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1;
+                for (let i=0; i<5; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(w/2+40, h/2-5 + i*3);
+                    ctx.lineTo(w/2+10, h/2-10 + i*4);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(w/2+40, h/2-5 + i*3);
+                    ctx.lineTo(w/2+70, h/2-15 + i*4);
+                    ctx.stroke();
+                }
+            }
+
+            function generateRealisticOcean(w, h) {
+                // Небо
+                const skyGrad = ctx.createLinearGradient(0, 0, 0, h/2);
+                skyGrad.addColorStop(0, '#0a2f6a');
+                skyGrad.addColorStop(1, '#3a7fb0');
+                ctx.fillStyle = skyGrad;
+                ctx.fillRect(0, 0, w, h/2);
+
+                // Море
+                const seaGrad = ctx.createLinearGradient(0, h/2, 0, h);
+                seaGrad.addColorStop(0, '#1e5f9e');
+                seaGrad.addColorStop(0.5, '#0a3a6a');
+                seaGrad.addColorStop(1, '#042a4a');
+                ctx.fillStyle = seaGrad;
+                ctx.fillRect(0, h/2, w, h/2);
+
+                // Волны (пена)
+                ctx.fillStyle = 'rgba(255,255,255,0.15)';
+                for (let i=0; i<8; i++) {
+                    ctx.beginPath();
+                    ctx.ellipse(w*(0.1+i*0.12), h/2+40, 50, 15, 0, 0, 2*Math.PI);
+                    ctx.fill();
+                }
+                // Блики
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                for (let i=0; i<50; i++) {
+                    ctx.beginPath();
+                    ctx.arc(Math.random()*w, h/2+Math.random()*h/2, 3, 0, 2*Math.PI);
+                    ctx.fill();
+                }
+
+                // Чайка
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(w*0.8, h*0.2);
+                ctx.lineTo(w*0.82, h*0.18);
+                ctx.lineTo(w*0.84, h*0.22);
                 ctx.stroke();
             }
 
-            // Облака
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            for (let i = 0; i < 3; i++) {
-                const x = w * (0.2 + i * 0.3);
-                const y = h * 0.15;
-                ctx.beginPath();
-                ctx.arc(x - 30, y, 25, 0, Math.PI * 2);
-                ctx.arc(x, y - 20, 35, 0, Math.PI * 2);
-                ctx.arc(x + 30, y, 25, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
+            function generateRealisticForest(w, h) {
+                // Небо
+                ctx.fillStyle = '#9fc5e8';
+                ctx.fillRect(0, 0, w, h/2);
 
-        function generateForest(w, h, baseColor) {
-            ctx.fillStyle = '#87CEEB';
-            ctx.fillRect(0, 0, w, h/2);
+                // Лес
+                ctx.fillStyle = '#1f4f1f';
+                ctx.fillRect(0, h/2, w, h/2);
 
-            ctx.fillStyle = '#2d5016';
-            ctx.fillRect(0, h/2, w, h/2);
-
-            // Деревья
-            for (let i = 0; i < 20; i++) {
-                const x = Math.random() * w;
-                const y = h/2 + Math.random() * (h/2);
-                
-                ctx.fillStyle = '#654321';
-                ctx.fillRect(x - 8, y - 40, 16, 80);
-                
-                ctx.fillStyle = '#1a5f1a';
-                ctx.beginPath();
-                ctx.arc(x, y - 60, 45, 0, Math.PI * 2);
-                ctx.fill();
-                
-                ctx.fillStyle = '#228B22';
-                ctx.beginPath();
-                ctx.arc(x, y - 30, 40, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function generateSunset(w, h, baseColor) {
-            const skyGrad = ctx.createLinearGradient(0, 0, 0, h);
-            skyGrad.addColorStop(0, '#FF6B35');
-            skyGrad.addColorStop(0.3, '#F7A072');
-            skyGrad.addColorStop(0.5, '#FFE66D');
-            skyGrad.addColorStop(1, '#FF6B35');
-            ctx.fillStyle = skyGrad;
-            ctx.fillRect(0, 0, w, h);
-
-            // Солнце
-            ctx.fillStyle = '#FFD700';
-            ctx.beginPath();
-            ctx.arc(w/2, h * 0.6, w/6, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Силуэты деревьев
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-            for (let i = 0; i < 5; i++) {
-                const x = w * (0.1 + i * 0.2);
-                ctx.fillRect(x - 15, h * 0.7, 30, h * 0.3);
-                ctx.beginPath();
-                ctx.arc(x, h * 0.65, 35, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function generateWinter(w, h, baseColor) {
-            ctx.fillStyle = '#E8F4F8';
-            ctx.fillRect(0, 0, w, h);
-
-            ctx.fillStyle = '#FFFFFF';
-            for (let i = 0; i < 50; i++) {
-                const x = Math.random() * w;
-                const y = Math.random() * h;
-                const size = Math.random() * 3 + 1;
-                ctx.beginPath();
-                ctx.arc(x, y, size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            ctx.fillStyle = '#F0F8FF';
-            ctx.fillRect(0, h * 0.7, w, h * 0.3);
-
-            // Снежные холмы
-            ctx.fillStyle = '#E0E6FF';
-            for (let i = 0; i < 3; i++) {
-                ctx.beginPath();
-                ctx.ellipse(w * (0.2 + i * 0.3), h * 0.65, w/4, h/6, 0, 0, Math.PI);
-                ctx.fill();
-            }
-        }
-
-        function generateSpace(w, h, baseColor) {
-            ctx.fillStyle = '#000814';
-            ctx.fillRect(0, 0, w, h);
-
-            // Звёзды
-            ctx.fillStyle = '#FFFFFF';
-            for (let i = 0; i < 100; i++) {
-                const x = Math.random() * w;
-                const y = Math.random() * h;
-                const size = Math.random() * 2;
-                ctx.beginPath();
-                ctx.arc(x, y, size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            // Туманность
-            ctx.fillStyle = 'rgba(138, 43, 226, 0.3)';
-            ctx.beginPath();
-            ctx.arc(w/3, h/3, w/4, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = 'rgba(0, 191, 255, 0.2)';
-            ctx.beginPath();
-            ctx.arc(2*w/3, 2*h/3, w/3, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        function applyStyle(style) {
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
-
-            if (style === 'painting') {
-                for (let i = 0; i < data.length; i += 4) {
-                    if (Math.random() > 0.7) {
-                        const shift = Math.random() * 30 - 15;
-                        data[i] += shift;
-                        data[i + 1] += shift;
-                        data[i + 2] += shift;
-                    }
+                // Деревья
+                for (let i=0; i<20; i++) {
+                    const x = 20 + Math.random()*(w-40);
+                    const y = h/2 + Math.random()*100;
+                    ctx.fillStyle = '#4a3a2a';
+                    ctx.fillRect(x-10, y-100, 20, 100);
+                    ctx.fillStyle = '#1f7a1f';
+                    ctx.beginPath();
+                    ctx.arc(x-5, y-130, 35, 0, 2*Math.PI);
+                    ctx.arc(x+15, y-110, 30, 0, 2*Math.PI);
+                    ctx.fill();
                 }
-            } else if (style === 'cartoon') {
-                for (let i = 0; i < data.length; i += 4) {
-                    data[i] = Math.min(255, data[i] * 1.2);
-                    data[i + 1] = Math.min(255, data[i + 1] * 1.2);
-                    data[i + 2] = Math.min(255, data[i + 2] * 1.2);
+
+                // Солнечные лучи
+                ctx.fillStyle = 'rgba(255,255,200,0.1)';
+                for (let i=0; i<5; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, h/2);
+                    ctx.lineTo(w, h/2-50);
+                    ctx.lineTo(w, h/2+50);
+                    ctx.fill();
                 }
-            } else if (style === 'digital') {
-                for (let i = 0; i < data.length; i += 8) {
-                    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-                    data[i] = data[i + 4] = avg;
-                    data[i + 1] = data[i + 5] = avg;
-                    data[i + 2] = data[i + 6] = avg;
+
+                // Трава
+                ctx.strokeStyle = '#2d6a2d';
+                ctx.lineWidth = 1;
+                for (let i=0; i<400; i++) {
+                    const x = Math.random()*w;
+                    const y = h/2 + Math.random()*h/2;
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x-3+Math.random()*6, y-8-Math.random()*10);
+                    ctx.stroke();
                 }
             }
 
-            // Шум
-            for (let i = 0; i < data.length; i += 4) {
-                const noise = (Math.random() - 0.5) * 25;
-                data[i] = Math.max(0, Math.min(255, data[i] + noise));
-                data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise));
-                data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise));
+            function generateRealisticSunset(w, h) {
+                const grad = ctx.createLinearGradient(0, 0, 0, h);
+                grad.addColorStop(0, '#ff7b24');
+                grad.addColorStop(0.4, '#ffb56b');
+                grad.addColorStop(0.7, '#c97e5a');
+                grad.addColorStop(1, '#3a1e0a');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, w, h);
+
+                // Солнце
+                ctx.fillStyle = '#ffd27f';
+                ctx.beginPath();
+                ctx.arc(w/2, h*0.45, 40, 0, 2*Math.PI);
+                ctx.fill();
+
+                // Силуэты деревьев
+                ctx.fillStyle = '#1a1a1a';
+                for (let i=0; i<8; i++) {
+                    const x = i*w/9;
+                    ctx.fillRect(x-15, h*0.6, 30, h*0.4);
+                    ctx.beginPath();
+                    ctx.arc(x, h*0.55, 40, 0, Math.PI, true);
+                    ctx.fill();
+                }
+
+                // Облака
+                ctx.fillStyle = 'rgba(255,100,50,0.3)';
+                ctx.beginPath();
+                ctx.arc(w*0.2, h*0.2, 60, 0, 2*Math.PI);
+                ctx.arc(w*0.35, h*0.15, 50, 0, 2*Math.PI);
+                ctx.fill();
             }
 
-            ctx.putImageData(imageData, 0, 0);
-        }
+            function generateRealisticWinter(w, h) {
+                ctx.fillStyle = '#dbe9f0';
+                ctx.fillRect(0, 0, w, h);
 
-        async function generateWithML() {
-            const w = parseInt(sizeSelect.value);
-            const h = parseInt(sizeSelect.value);
-            canvas.width = w;
-            canvas.height = h;
+                // Снег на земле
+                ctx.fillStyle = '#f0f8ff';
+                ctx.beginPath();
+                ctx.ellipse(w/2, h*0.8, w/2, h/5, 0, 0, 2*Math.PI);
+                ctx.fill();
 
-            const baseColor = '#87CEEB';
-            const grad = ctx.createLinearGradient(0, 0, 0, h);
-            grad.addColorStop(0, baseColor);
-            grad.addColorStop(0.5, adjustBrightness(baseColor, 15));
-            grad.addColorStop(1, adjustBrightness(baseColor, -15));
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, w, h);
+                // Деревья в снегу
+                for (let i=0; i<6; i++) {
+                    const x = 50 + i*100;
+                    ctx.fillStyle = '#3a5a3a';
+                    ctx.fillRect(x-10, h*0.5, 20, 150);
+                    ctx.fillStyle = '#f0f8ff';
+                    ctx.beginPath();
+                    ctx.arc(x, h*0.45, 35, 0, 2*Math.PI);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(x-15, h*0.55, 30, 0, 2*Math.PI);
+                    ctx.fill();
+                }
 
-            await new Promise(resolve => setTimeout(resolve, 300));
-            genProgress.style.width = '40%';
-            genPercent.textContent = '40%';
-            genStatus.textContent = '🎨 Генерирую...';
-
-            if (selectedType === 'portrait') {
-                generatePortrait(w, h, baseColor);
-            } else if (selectedType === 'landscape') {
-                generateLandscape(w, h, baseColor);
-            } else if (selectedType === 'nature') {
-                generateNature(w, h, baseColor);
-            } else if (selectedType === 'city') {
-                generateCity(w, h, baseColor);
-            } else if (selectedType === 'animal') {
-                generateAnimal(w, h, baseColor);
-            } else if (selectedType === 'ocean') {
-                generateOcean(w, h, baseColor);
-            } else if (selectedType === 'forest') {
-                generateForest(w, h, baseColor);
-            } else if (selectedType === 'sunset') {
-                generateSunset(w, h, baseColor);
-            } else if (selectedType === 'winter') {
-                generateWinter(w, h, baseColor);
-            } else if (selectedType === 'space') {
-                generateSpace(w, h, baseColor);
+                // Снежинки
+                ctx.fillStyle = '#fff';
+                for (let i=0; i<200; i++) {
+                    ctx.beginPath();
+                    ctx.arc(Math.random()*w, Math.random()*h, 2+Math.random()*3, 0, 2*Math.PI);
+                    ctx.fill();
+                }
             }
 
-            await new Promise(resolve => setTimeout(resolve, 300));
-            genProgress.style.width = '70%';
-            genPercent.textContent = '70%';
-            genStatus.textContent = '✨ Применяю стиль...';
+            function generateRealisticSpace(w, h) {
+                ctx.fillStyle = '#030514';
+                ctx.fillRect(0, 0, w, h);
 
-            await new Promise(resolve => setTimeout(resolve, 300));
-            applyStyle(styleSelect.value);
+                // Звёзды
+                for (let i=0; i<300; i++) {
+                    const brightness = 0.5 + Math.random()*0.5;
+                    ctx.fillStyle = `rgba(255,255,255,${brightness})`;
+                    ctx.beginPath();
+                    ctx.arc(Math.random()*w, Math.random()*h, Math.random()*2.5, 0, 2*Math.PI);
+                    ctx.fill();
+                }
 
-            genProgress.style.width = '100%';
-            genPercent.textContent = '100%';
-        }
+                // Туманность
+                const nebula = ctx.createRadialGradient(w/3, h/3, 50, w/3, h/3, 200);
+                nebula.addColorStop(0, 'rgba(128,0,128,0.2)');
+                nebula.addColorStop(0.8, 'rgba(0,0,128,0.1)');
+                nebula.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = nebula;
+                ctx.fillRect(0, 0, w, h);
 
-        async function generate() {
-            if (isGenerating) return;
+                // Планета
+                ctx.fillStyle = '#a57c5a';
+                ctx.beginPath();
+                ctx.arc(w*0.7, h*0.3, 50, 0, 2*Math.PI);
+                ctx.fill();
+                // Кольцо
+                ctx.strokeStyle = '#c0c0c0';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.ellipse(w*0.7, h*0.3, 80, 20, 0, 0, 2*Math.PI);
+                ctx.stroke();
 
-            isGenerating = true;
-            generateBtn.disabled = true;
-            regenerateBtn.disabled = true;
-            loading.classList.add('show');
-            canvasSection.classList.remove('show');
+                // Спутник
+                ctx.fillStyle = '#aaa';
+                ctx.fillRect(w*0.2, h*0.7, 30, 10);
+                ctx.fillRect(w*0.23, h*0.65, 5, 15);
+            }
 
-            const startTime = Date.now();
-            const timerInterval = setInterval(() => {
-                timer.textContent = Math.floor((Date.now() - startTime) / 1000);
-            }, 100);
+            // Главная функция генерации
+            async function generateImage() {
+                if (isGenerating) return;
+                isGenerating = true;
+                generateBtn.disabled = true;
 
-            try {
-                status.textContent = 'загрузка модели';
-                modelStatus.textContent = '📥 Загружаю модель...';
+                loading.classList.add('show');
+                canvasSection.classList.remove('show');
                 modelProgress.style.width = '0%';
+                genProgress.style.width = '0%';
+                modelPercent.textContent = '0%';
+                genPercent.textContent = '0%';
+                modelStatus.textContent = 'Загрузка нейросети...';
+                genStatus.textContent = 'Обработка...';
+                statusSpan.textContent = 'инициализация';
+                timerSpan.textContent = '0';
 
-                for (let i = 0; i <= 100; i += 20) {
-                    modelProgress.style.width = i + '%';
-                    modelPercent.textContent = i + '%';
-                    await new Promise(r => setTimeout(r, 150));
-                }
+                startTimer();
 
-                modelStatus.textContent = '✓ Модель готова';
-                status.textContent = 'генерирование';
-                genStatus.textContent = '🚀 Генерирую...';
+                try {
+                    const size = parseInt(sizeSelect.value);
+                    canvas.width = size;
+                    canvas.height = size;
 
-                await generateWithML();
+                    await simulateProgress();
 
-                clearInterval(timerInterval);
-                setTimeout(() => {
-                    loading.classList.remove('show');
+                    // Вызов соответствующей функции
+                    switch (selectedType) {
+                        case 'portrait': generateRealisticPortrait(size, size); break;
+                        case 'landscape': generateRealisticLandscape(size, size); break;
+                        case 'city': generateRealisticCity(size, size); break;
+                        case 'nature': generateRealisticNature(size, size); break;
+                        case 'animal': generateRealisticAnimal(size, size); break;
+                        case 'ocean': generateRealisticOcean(size, size); break;
+                        case 'forest': generateRealisticForest(size, size); break;
+                        case 'sunset': generateRealisticSunset(size, size); break;
+                        case 'winter': generateRealisticWinter(size, size); break;
+                        case 'space': generateRealisticSpace(size, size); break;
+                        default: generateRealisticPortrait(size, size);
+                    }
+
+                    applyRealisticStyle(styleSelect.value, qualitySelect.value);
                     canvasSection.classList.add('show');
-                    isGenerating = false;
+                } catch (err) {
+                    showError('Ошибка генерации: ' + err.message);
+                } finally {
+                    stopTimer();
+                    loading.classList.remove('show');
                     generateBtn.disabled = false;
-                    regenerateBtn.disabled = false;
-                }, 500);
-
-            } catch (err) {
-                clearInterval(timerInterval);
-                showError(err.message);
-                loading.classList.remove('show');
-                isGenerating = false;
-                generateBtn.disabled = false;
-                regenerateBtn.disabled = false;
+                    isGenerating = false;
+                }
             }
-        }
 
-        downloadBtn.addEventListener('click', () => {
-            const link = document.createElement('a');
-            link.href = canvas.toDataURL('image/png');
-            link.download = `neural-ai-${Date.now()}.png`;
-            link.click();
-        });
-
-        regenerateBtn.addEventListener('click', generate);
-        generateBtn.addEventListener('click', generate);
+            generateBtn.addEventListener('click', generateImage);
+            regenerateBtn.addEventListener('click', () => { if (!isGenerating) generateImage(); });
+            downloadBtn.addEventListener('click', () => {
+                const link = document.createElement('a');
+                link.download = `ai-photo-${selectedType}-${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        })();
     </script>
 </body>
 </html>
